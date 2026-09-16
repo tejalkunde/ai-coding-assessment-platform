@@ -1,0 +1,49 @@
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+env/
+
+# Node / React
+node_modules/
+dist/
+build/
+.npm/
+*.log
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Coverage
+coverage/
+
+# Docker
+*.tar
+*.tar.gz
+
+# Temporary files
+tmp/
+temp/
+
+# Generated execution files
+execution/**/workspace/
+execution/**/output/
