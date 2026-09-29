@@ -76,3 +76,14 @@ class DockerPythonSandbox(SandboxRunner):
                     stderr=exc.stderr or "",
                     execution_time_ms=execution_time_ms,
                 )
+
+            except (subprocess.SubprocessError, OSError) as exc:
+                execution_time_ms = (
+                    time.perf_counter() - start_time
+                ) * 1000
+
+                return ExecutionResult(
+                    status="EXECUTION_ERROR",
+                    stderr=str(exc),
+                    execution_time_ms=execution_time_ms,
+                )
