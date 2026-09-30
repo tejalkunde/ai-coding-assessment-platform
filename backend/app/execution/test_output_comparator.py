@@ -1,25 +1,17 @@
 from backend.app.execution.output_comparator import compare_output
 
 
-tests = [
-    ("5", "5", True),
-    ("5\n", "5", True),
-    (" 5 ", "5", True),
-    ("5", "6", False),
-]
+def test_exact_match():
+    assert compare_output("5", "5") is True
 
 
-for actual, expected, expected_result in tests:
-    result = compare_output(actual, expected)
-
-    print(
-        f"Actual={actual!r}, "
-        f"Expected={expected!r}, "
-        f"Result={result}, "
-        f"Expected Result={expected_result}"
-    )
-
-    assert result == expected_result
+def test_trailing_newline_is_ignored():
+    assert compare_output("5\n", "5") is True
 
 
-print("All comparator tests passed.")
+def test_surrounding_whitespace_is_ignored():
+    assert compare_output(" 5 ", "5") is True
+
+
+def test_different_output_fails():
+    assert compare_output("5", "6") is False

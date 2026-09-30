@@ -2,7 +2,7 @@ from backend.app.execution.docker_python_sandbox import DockerPythonSandbox
 from backend.app.execution.judge_models import JudgeResult, TestResult
 from backend.app.execution.models import ExecutionRequest
 from backend.app.execution.output_comparator import compare_output
-from backend.app.execution.test_case import TestCase
+from backend.app.execution.test_case import JudgeTestCase
 
 
 class Judge:
@@ -13,7 +13,7 @@ class Judge:
     def judge(
         self,
         source_code: str,
-        test_cases: list[TestCase],
+        test_cases: list[JudgeTestCase],
         timeout_seconds: int = 5,
         memory_mb: int = 256,
     ) -> JudgeResult:
