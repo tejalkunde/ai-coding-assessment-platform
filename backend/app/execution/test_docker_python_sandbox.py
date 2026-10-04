@@ -109,3 +109,22 @@ print(f"Hello, {name}")
 
     assert result.status == "COMPLETED"
     assert result.stdout.strip() == "Hello, Tejal"
+
+from unittest.mock import patch
+
+def test_sandbox_handles_execution_error():
+    sandbox = DockerPythonSandbox()
+
+    request = ExecutionRequest(
+        language="python",
+        source_code='print("hello")',
+    )
+
+    with patch(
+        "backend.app.execution.docker_python_sandbox.subprocess.run",
+        side_effect=OSError("Docker daemon unavailable"),
+    ):
+        result = sandbox.run(request)
+
+    assert result.status == "EXECUTION_ERROR"
+    assert "Docker daemon unavailable" in result.stderr
