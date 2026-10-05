@@ -30,6 +30,10 @@ class DockerPythonSandbox(SandboxRunner):
                 "1",
                 "--pids-limit",
                 "64",
+                "--cap-drop",
+                "ALL",
+                "--security-opt",
+                "no-new-privileges",
                 "--mount",
                 f"type=bind,source={workspace},target=/workspace,readonly",
                 "python:3.13-alpine",
@@ -87,3 +91,8 @@ class DockerPythonSandbox(SandboxRunner):
                     stderr=str(exc),
                     execution_time_ms=execution_time_ms,
                 )
+
+
+
+
+
