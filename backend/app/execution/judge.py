@@ -3,12 +3,33 @@ from backend.app.execution.judge_models import JudgeResult, TestResult
 from backend.app.execution.models import ExecutionRequest
 from backend.app.execution.output_comparator import compare_output
 from backend.app.execution.test_case import JudgeTestCase
+from backend.app.problems.models import Problem
 
 
 class Judge:
 
     def __init__(self, sandbox=None):
         self.sandbox = sandbox or DockerPythonSandbox()
+
+    def judge_problem(
+        self,
+        source_code: str,
+        problem: Problem,
+    ) -> JudgeResult:
+
+        test_cases = [
+            JudgeTestCase(
+                input_data=test_case.input_data,
+                expected_output=test_case.expected_output,
+                is_hidden=test_case.is_hidden,
+            )
+            for test_case in problem.test_cases
+        ]
+
+        return self.judge(
+            source_code=source_code,
+            test_cases=test_cases,
+        )
 
     def judge(
         self,
