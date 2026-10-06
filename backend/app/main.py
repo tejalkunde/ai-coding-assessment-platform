@@ -1,9 +1,15 @@
 from fastapi import FastAPI
 
+from backend.app.problems.router import router as problems_router
+
+
 app = FastAPI(
     title="AI Coding & DSA Assessment Platform",
     version="0.1.0",
 )
+
+
+app.include_router(problems_router)
 
 
 @app.get("/")
