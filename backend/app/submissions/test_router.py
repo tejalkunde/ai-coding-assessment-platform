@@ -24,9 +24,9 @@ def setup_problem():
                     "expected_output": "5\n",
                     "is_hidden": False,
                     "time_limit_seconds": 5,
-                    "memory_limit_mb": 256
+                    "memory_limit_mb": 256,
                 }
-            ]
+            ],
         },
     )
 
@@ -41,9 +41,11 @@ def test_submission_api_accepts_correct_solution():
         json={
             "problem_id": "echo-api-test",
             "source_code": "print(input())",
-            "language": "python"
+            "language": "python",
         },
     )
+
+    print("SUBMISSION RESPONSE:", response.json())
 
     assert response.status_code == 200
     assert response.json()["status"] == "ACCEPTED"
@@ -59,7 +61,7 @@ def test_submission_api_rejects_wrong_solution():
         json={
             "problem_id": "echo-api-test",
             "source_code": 'print("wrong")',
-            "language": "python"
+            "language": "python",
         },
     )
 
@@ -77,8 +79,53 @@ def test_submission_api_returns_404_for_missing_problem():
         json={
             "problem_id": "does-not-exist",
             "source_code": "print(input())",
-            "language": "python"
+            "language": "python",
         },
     )
 
     assert response.status_code == 404
+
+
+def test_submission_api_rejects_unsupported_language():
+    setup_problem()
+
+    response = client.post(
+        "/submissions/",
+        json={
+            "problem_id": "echo-api-test",
+            "source_code": "System.out.println(2);",
+            "language": "java",
+        },
+    )
+
+    assert response.status_code == 422
+
+
+def test_submission_api_rejects_empty_source_code():
+    setup_problem()
+
+    response = client.post(
+        "/submissions/",
+        json={
+            "problem_id": "echo-api-test",
+            "source_code": "   ",
+            "language": "python",
+        },
+    )
+
+    assert response.status_code == 422
+
+
+def test_submission_api_rejects_empty_problem_id():
+    setup_problem()
+
+    response = client.post(
+        "/submissions/",
+        json={
+            "problem_id": "   ",
+            "source_code": "print(input())",
+            "language": "python",
+        },
+    )
+
+    assert response.status_code == 422
